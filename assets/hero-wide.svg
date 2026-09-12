@@ -1,35 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="452" viewBox="0 0 1376 452" role="img" aria-label="叶青 · 固定收益研究与 Skill 工程化">
+<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="452" viewBox="0 0 1376 452" role="img" aria-label="研究工程笔记 · 把研究能力做成能跑的工程件">
 <defs>
-<linearGradient id="g5968144597" x1="0" y1="0" x2="1" y2="1">
+<linearGradient id="gf03e09b5ad" x1="0" y1="0" x2="1" y2="1">
   <stop offset="0" stop-color="#07182e"/><stop offset="0.46" stop-color="#0b2545"/>
   <stop offset="1" stop-color="#13315c"/></linearGradient>
-<radialGradient id="g6787982858" cx="0.5" cy="0.5" r="0.5">
+<radialGradient id="g291213fc02" cx="0.5" cy="0.5" r="0.5">
   <stop offset="0" stop-color="#c8a45c" stop-opacity="0.40"/>
   <stop offset="0.45" stop-color="#c8a45c" stop-opacity="0.10"/>
   <stop offset="1" stop-color="#c8a45c" stop-opacity="0"/></radialGradient>
-<radialGradient id="g9817938649" cx="0.5" cy="0.5" r="0.62">
+<radialGradient id="gd3eefc0e40" cx="0.5" cy="0.5" r="0.62">
   <stop offset="0.55" stop-color="#000000" stop-opacity="0"/>
   <stop offset="1" stop-color="#000000" stop-opacity="0.32"/></radialGradient>
-<clipPath id="g7885012108"><rect width="1376" height="452" rx="18"/></clipPath>
+<clipPath id="g6ba7c10467"><rect width="1376" height="452" rx="18"/></clipPath>
 </defs>
-<g clip-path="url(#g7885012108)">
-<rect width="1376" height="452" fill="url(#g5968144597)"/>
-<ellipse cx="826" cy="-203" rx="716" ry="443" fill="url(#g6787982858)"/>
+<g clip-path="url(#g6ba7c10467)">
+<rect width="1376" height="452" fill="url(#gf03e09b5ad)"/>
+<ellipse cx="826" cy="-203" rx="716" ry="443" fill="url(#g291213fc02)"/>
 <path d="M0 0 V452 M46 0 V452 M92 0 V452 M138 0 V452 M184 0 V452 M230 0 V452 M276 0 V452 M322 0 V452 M368 0 V452 M414 0 V452 M460 0 V452 M506 0 V452 M552 0 V452 M598 0 V452 M644 0 V452 M690 0 V452 M736 0 V452 M782 0 V452 M828 0 V452 M874 0 V452 M920 0 V452 M966 0 V452 M1012 0 V452 M1058 0 V452 M1104 0 V452 M1150 0 V452 M1196 0 V452 M1242 0 V452 M1288 0 V452 M1334 0 V452 M0 0 H1376 M0 46 H1376 M0 92 H1376 M0 138 H1376 M0 184 H1376 M0 230 H1376 M0 276 H1376 M0 322 H1376 M0 368 H1376 M0 414 H1376" stroke="#ffffff" stroke-opacity="0.055" stroke-width="1"/>
-<rect width="1376" height="452" fill="url(#g9817938649)"/>
+<rect width="1376" height="452" fill="url(#gd3eefc0e40)"/>
 </g>
 <rect x="0.75" y="0.75" width="1374.5" height="450.5" rx="18" fill="none" stroke="#c8a45c" stroke-opacity="0.30" stroke-width="1.5"/>
 <circle cx="82" cy="86" r="6" fill="#e0c084"/>
-<text x="102.0" y="92.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="600" fill="#e0c084" letter-spacing="2.8">FIXED INCOME RESEARCH · SKILL ENGINEERING</text>
-<text x="76.0" y="190.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="2">叶青</text>
+<text x="102.0" y="92.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="600" fill="#e0c084" letter-spacing="2.8">RESEARCH ENGINEERING · AI WORKFLOW</text>
+<text x="76.0" y="190.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="2">研究工程笔记</text>
 <text x="76.0" y="244.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="26" font-weight="600" fill="#e0c084">把研究能力做成能跑的工程件</text>
 <text x="76.0" y="252.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="22" font-weight="400" fill="#c3d2e4">通用模型给的是通用答案，有用的判断长在每个人自己的数据与经验里。</text>
 <text x="76.0" y="300.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="22" font-weight="400" fill="#c3d2e4">把研究里的方法、口径、数据源，拆成可以复述、可以核对的零件。</text>
 <rect x="76" y="322" width="74" height="3" rx="1.5" fill="#c8a45c"/>
-<text x="76.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">14</text>
-<text x="76.0" y="411.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="400" fill="#9fb3c8">开源仓库</text>
-<text x="484.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">9</text>
+<text x="76.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">21</text>
+<text x="76.0" y="411.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="400" fill="#9fb3c8">公开仓库</text>
+<text x="484.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">10</text>
 <text x="484.0" y="411.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="400" fill="#9fb3c8">架构手册</text>
-<text x="892.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">1</text>
-<text x="892.0" y="411.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="400" fill="#9fb3c8">工作论文</text>
+<text x="892.0" y="384.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="30" font-weight="800" fill="#ffffff">3</text>
+<text x="892.0" y="411.0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif" font-size="15.5" font-weight="400" fill="#9fb3c8">工程件 / 论文</text>
 </svg>
