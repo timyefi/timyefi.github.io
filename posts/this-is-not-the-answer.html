@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>这不是答案 · 研究工程笔记</title>
 <meta name="description" content="Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。">
+<link rel="canonical" href="https://timyefi.github.io/posts/this-is-not-the-answer.html"><meta property="og:type" content="website"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="这不是答案 · 研究工程笔记"><meta property="og:description" content="Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。"><meta property="og:url" content="https://timyefi.github.io/posts/this-is-not-the-answer.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.svg"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.svg">
 <style>
 :root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
  --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
@@ -31,7 +32,7 @@ a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
  letter-spacing:-.3px}
 .hero h1 .grad{background:linear-gradient(100deg,var(--gold2),#fff7e6 55%,var(--gold2));
  -webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;max-width:680px}
+.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;line-height:1.78;max-width:680px}
 .hero nav{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
 .hero nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;
  font-size:14px;font-weight:600;transition:.24s}
@@ -41,6 +42,12 @@ a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
 .hero nav a.ghost{background:rgba(255,255,255,.07);color:#dfe8f3;
  border:1px solid rgba(255,255,255,.22)}
 .hero nav a.ghost:hover{background:rgba(255,255,255,.13);text-decoration:none}
+.hero .stats{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 40px}
+.hero .stats .st{display:flex;align-items:baseline;gap:9px}
+.hero .stats .st b{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero .stats .st span{font-size:13.5px;color:#9fb3c8}
+@media(max-width:640px){.hero .stats{gap:6px 24px;margin-top:24px}
+ .hero .stats .st b{font-size:22px} .hero .stats .st span{font-size:12.5px}}
 
 .sec{margin:52px 0 20px;display:flex;align-items:center;gap:14px}
 .sec i{width:6px;height:30px;border-radius:3px;background:var(--gold);display:block;flex:none}
@@ -134,7 +141,7 @@ footer.site p{margin:0 0 6px}
 <hr>
 <p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p></main>
 <footer class="site"><div class="wrap">
-  <p>文章采用 CC BY-NC 4.0 许可（署名、非商业使用）· 商业用途需另行授权</p>
+  <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
   <p>研究工程 · AI 工作流 · 本机优先</p>
 </div></footer>
 </body>
