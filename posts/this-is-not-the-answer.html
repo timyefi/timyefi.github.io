@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>这不是答案 · 研究工程笔记</title>
 <meta name="description" content="Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。">
-<link rel="canonical" href="https://timyefi.github.io/posts/this-is-not-the-answer.html"><meta property="og:type" content="website"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="这不是答案 · 研究工程笔记"><meta property="og:description" content="Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。"><meta property="og:url" content="https://timyefi.github.io/posts/this-is-not-the-answer.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.svg"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.svg">
+<link rel="canonical" href="https://timyefi.github.io/posts/this-is-not-the-answer.html"><link rel="icon" href="../assets/icon.svg" type="image/svg+xml"><link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="研究工程笔记" href="https://timyefi.github.io/feed.xml"><meta name="theme-color" content="#0b2545"><meta property="og:type" content="article"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="这不是答案 · 研究工程笔记"><meta property="og:description" content="Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。"><meta property="og:url" content="https://timyefi.github.io/posts/this-is-not-the-answer.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.png"><meta property="og:image:width" content="1200"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "这不是答案 · 研究工程笔记", "description": "Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。", "url": "https://timyefi.github.io/posts/this-is-not-the-answer.html", "inLanguage": "zh-CN", "publisher": {"@type": "Organization", "name": "研究工程笔记"}, "datePublished": "2026-09-10"}</script>
 <style>
 :root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
  --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
@@ -90,7 +90,31 @@ a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace}
 .article pre{background:#0e1c2e;color:#e6edf5;padding:16px 18px;border-radius:10px;overflow:auto}
 .article pre code{background:none;padding:0;color:inherit}
-.article ul{padding-left:22px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article ul,.article ol{padding-left:24px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article .tw{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.article table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+.article th,.article td{border:1px solid var(--line);padding:9px 12px;text-align:left;
+ vertical-align:top}
+.article th{background:#eef2f7;color:var(--navy);font-weight:700;white-space:nowrap}
+.article tbody tr:nth-child(even){background:#fafbfd}
+.article h2,.article h3{scroll-margin-top:18px}
+.article .toc{background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:16px 20px;margin:0 0 30px}
+.article .toc p{margin:0 0 8px;font-size:12.5px;letter-spacing:2px;font-weight:700;
+ color:var(--muted)}
+.article .toc ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+.article .toc a{color:var(--navy2)}
+.article .toc li{margin:0}
+.article .meta .dot{color:#c8d0d9;padding:0 7px}
+.article .tags{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+ display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:26px 0 0}
+.pager a{display:block;border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+ background:#fff;transition:.24s}
+.pager a:hover{border-color:#cfd6de;text-decoration:none;transform:translateY(-1px)}
+.pager .lab{font-size:11.5px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.pager .tt{margin-top:6px;color:var(--navy);font-weight:600;font-size:15px;line-height:1.5}
+.pager .ph{visibility:hidden}
 .article img{max-width:100%;height:auto;border-radius:10px}
 
 footer.site{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;
@@ -100,46 +124,47 @@ footer.site p{margin:0 0 6px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(286px,1fr))}}
 @media(max-width:640px){
  .wrap{padding:0 18px} .hero{padding:46px 0 50px} .grid{grid-template-columns:1fr}
- .card{padding:20px} .article{padding:34px 18px 64px}}
+ .card{padding:20px} .article{padding:34px 18px 64px}
+ .pager{grid-template-columns:1fr} .article p{font-size:16px}}
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>这不是答案</h1><p>Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>这不是答案</h1><p class="meta">2026-09-10 · 理念与方法论</p><h2>一、一个反复出现的误会</h2>
+<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>这不是答案</h1><p>Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>这不是答案</h1><p class="meta">2026-09-10<span class="dot">·</span>理念与方法论<span class="dot">·</span>约 5 分钟</p><nav class="toc"><p>目录 · CONTENTS</p><ol><li><a href="#一-一个反复出现的误会">一、一个反复出现的误会</a></li><li><a href="#二-答案不在系统里-在过程中">二、答案不在系统里，在过程中</a></li><li><a href="#三-为什么-采集全部信息-这条路走不通">三、为什么&quot;采集全部信息&quot;这条路走不通</a></li><li><a href="#四-通用模型解决不了的那一段">四、通用模型解决不了的那一段</a></li><li><a href="#五-一种相反的构建方式">五、一种相反的构建方式</a></li><li><a href="#六-对个人和对组织">六、对个人和对组织</a></li><li><a href="#七-这篇不是答案">七、这篇不是答案</a></li></ol></nav><h2 id="一-一个反复出现的误会">一、一个反复出现的误会</h2>
 <p>这两年，几乎每一次和朋友聊起手上在做的事情，最后都会落到同一个问题上：你们做出来的这些 Skill，到底是不是通用人工智能的那块拼图。</p>
 <p>提问的人通常带着两种预设。一种是期待，觉得这些封装好的能力迟早会被某个更大的模型整体吞掉，到那天一切又回到起点。另一种是怀疑，觉得这不过是把提示词写得长了一点、把脚本包得整齐了一点，离真正的智能还很远。</p>
 <p>两种预设指向同一个判断：我们在做的事情，是在逼近某个终点。所以第一件要说清楚的事是，这不是答案。</p>
 <p>AGI 也不是答案。</p>
-<h2>二、答案不在系统里，在过程中</h2>
+<h2 id="二-答案不在系统里-在过程中">二、答案不在系统里，在过程中</h2>
 <p>更准确的说法是，答案并不预先存在于某个地方等着被找到，它是在使用过程中长出来的。</p>
 <p>这一点，只要真的在自己的电脑上做过一轮完整的封装，就会立刻明白。同一家机构的两个研究员，看的是同一份年报、同一套财务附注口径，但一个人先看现金流与利润的背离，另一个人先看应收账款周转的天数；一个人把商誉减值当成必查项，另一个人把存货跌价看得更重。这些差异不是错误，是他们各自在多年实战里形成的判断顺序。你把这套顺序写下来，才第一次看得清它是什么。</p>
 <p>也就是说，每个人电脑里的东西都需要被训练一遍。不是为了训练一个通用模型，而是为了让那些原本只存在于经验里的东西，变得可以复述、可以核对、可以被自己改进。个人的数据天然是特殊的：你的持仓结构、你的观察频率、你对某个行业的隐性折扣，别人手里没有，公开语料里也没有。这些特殊性决定了，通用的东西解决不了你自己这一侧的问题。</p>
 <p>所以第一篇文章想说的不是某个产品、某个框架，而是一个位置：把智能落到每个人这一侧，是一件必须在自己机器上完成的事情。</p>
-<h2>三、为什么"采集全部信息"这条路走不通</h2>
+<h2 id="三-为什么-采集全部信息-这条路走不通">三、为什么"采集全部信息"这条路走不通</h2>
 <p>有一种看起来很自然的想法：既然每个人的数据都特殊，那把它们尽可能多地采集起来，交给一个足够大的模型，是不是就能得到答案。</p>
 <p>这条路走不通，有两层原因。</p>
 <p>第一层是现实层面的。你不可能把所有人的信息都采集完。研究员的判断很多发生在会议中间、电话里、翻页的那几秒钟，它根本没有被记录下来，也就无所谓采集。能被采集的部分，往往是最不重要的部分：公开的公告、公开的数据、公开的观点。</p>
 <p>第二层是逻辑层面的。即便采集到了，它也不是答案。因为不同人的想法经常互相冲突。同一只债，有人看到的是估值修复的空间，有人看到的是再融资的裂口；有人在收紧久期，有人正在拉长。把这些冲突并排放进一个模型，得到的不是更强的判断，而是一个被平均掉之后谁也不满意的中间值。冲突本身不是噪音，它恰恰是每个人判断力的来源。</p>
 <p>一个把所有人信息集中起来训练的模型，只能得到通用的东西。通用是它的优点，也是它的边界。</p>
-<h2>四、通用模型解决不了的那一段</h2>
+<h2 id="四-通用模型解决不了的那一段">四、通用模型解决不了的那一段</h2>
 <p>大模型训练出来是通用的，这一点不需要回避，也不需要贬低。它的能力边界很清晰：它读过的语料比任何个人都多，它对常识和语言的处理比任何个人都稳，它在开放问题上的广度是个人给不出来的。</p>
 <p>但你想让它替你做那道只有你能做的判断时，它会停下来。它不知道你的风险偏好是在哪一年被改变的，不知道你上一次在类似结构上吃过什么亏，不知道你所在的机构今年对某一类资产的态度。这些都不知道，它就只能在通用分布里给你一个最像样的答案，而不是最适合你的答案。</p>
 <p>我理解这一段空白，正是每个人需要自己动手的原因。不是为了造一个更大更全的东西，而是为了把能力拆到自己机器的粒度上，一直拆到每一根螺丝都能被单独看见、单独调整。</p>
-<h2>五、一种相反的构建方式</h2>
+<h2 id="五-一种相反的构建方式">五、一种相反的构建方式</h2>
 <p>过去两年，本机上的实践大致沿着一条路径走过来。最早是把一套能力整体封装成一个 Skill，能用，但改不动，换一个场景就要重做一遍；后来开始把能力拆成零部件，数据是一个件、逻辑是一个件、判断是一个件，零部件可以重新组合成新的框架；再往后，零部件的组合方式也开始被沉淀下来，可以被反复调用、被迭代。</p>
 <p>这个过程里最有价值的收获不是省了多少时间，而是<strong>判断第一次变得可以核对</strong>。一份研究结论摆在那里，你可以顺着零部件一路往回看，看到它用的是哪一份数据、套的是哪一条逻辑、加的是哪一个假设。哪一步是增量的，哪一步只是重复，一目了然。</p>
 <p>把能力拆开、把判断显性化，这件事本身没有任何神秘感。它更像是把一个老师傅的手感拆成图纸，图纸不一定能完全还原手感，但它让手感第一次能被讨论、被质疑、被传递。</p>
 <p>还有一点值得写下来。这件事最实际的收益是隐私和成本。整套东西跑在自己的电脑上，个人的判断、机构的口径、客户的信息，都不需要离开这台机器。自己做一遍的代价，通常只有市场上各类付费方案的一个零头，而且省掉的是最贵的那部分代价：数据出了门就再也收不回来的风险。</p>
-<h2>六、对个人和对组织</h2>
+<h2 id="六-对个人和对组织">六、对个人和对组织</h2>
 <p>对个人来说，AI 带来的最大变化是，过去说不清道不明的一些经验和记忆，现在可以尝试拆丝剥茧，变成日益清晰的逻辑。</p>
 <p>对组织来说，AI 带来的最大变化是，过去说不清道不明的研究框架和分析方法，现在也可以尝试拆丝剥茧，变成可复现的体系。</p>
 <p>两者是同一件事的两面。个人层面的经验数字化，积累起来就是组织的资产；组织层面的框架显性化，反过来又给个人的判断提供基准线。</p>
-<h2>七、这篇不是答案</h2>
+<h2 id="七-这篇不是答案">七、这篇不是答案</h2>
 <p>写到这里，需要坦白一件事：这篇文章本身也不是答案。</p>
 <p>它更像是一个开场，把接下来要写的东西的位置先摆清楚。之后会陆续写一些具体的东西：怎么把一份 Excel 数据库复现成一个可执行的 Skill，怎么让两套记忆系统在同一个入口下互相检索，怎么把一份原本要花半天做的分析压到几句话的调用。这些内容会尽量具体，具体到可以照着做。</p>
 <p>但如果只记住一件事，希望是这个：答案在使用过程中产生，不在系统里。</p>
 <p>系统提供的是通用的能力，判断永远是个人的工作。</p>
 <hr>
-<p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p></main>
+<p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p><div class="tags"><span class="tag">AI</span><span class="tag">Skill</span><span class="tag">方法论</span><span class="tag">本地化</span></div></main>
 <footer class="site"><div class="wrap">
   <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
   <p>研究工程 · AI 工作流 · 本机优先</p>

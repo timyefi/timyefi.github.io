@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+  <title>研究工程笔记</title>
+  <link>https://timyefi.github.io/</link>
+  <description>关于 AI、Skill 工程化与研究工作方法论的写作</description>
+  <language>zh-CN</language>
+  <item>
+    <title>这不是答案</title>
+    <link>https://timyefi.github.io/posts/this-is-not-the-answer.html</link>
+    <guid isPermaLink="true">https://timyefi.github.io/posts/this-is-not-the-answer.html</guid>
+    <pubDate>Thu, 10 Sep 2026 08:00:00 +0800</pubDate>
+    <category>理念与方法论</category>
+    <description>Skill 不是答案，AGI 也不是答案。答案在使用过程中产生——每个人的机器、每个人的数据都需要被单独训练，通用模型解决不了智能在个人这一侧落地的问题。</description>
+  </item>
+</channel></rss>
