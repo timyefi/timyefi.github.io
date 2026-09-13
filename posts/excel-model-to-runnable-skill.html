@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>把一份 Excel 数据库复刻成一个能跑的东西 · 研究工程笔记</title>
+<meta name="description" content="从一张没人敢动的 Excel 数据库出发：先解剖公式与真值再写代码，把数据、逻辑、判断拆成三层，把不能猜的口径问清楚，最后用可重跑的对账证明迁移完成。">
+<link rel="canonical" href="https://timyefi.github.io/posts/excel-model-to-runnable-skill.html"><link rel="icon" href="../assets/icon.svg" type="image/svg+xml"><link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="研究工程笔记" href="https://timyefi.github.io/feed.xml"><meta name="theme-color" content="#0b2545"><meta property="og:type" content="article"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="把一份 Excel 数据库复刻成一个能跑的东西 · 研究工程笔记"><meta property="og:description" content="从一张没人敢动的 Excel 数据库出发：先解剖公式与真值再写代码，把数据、逻辑、判断拆成三层，把不能猜的口径问清楚，最后用可重跑的对账证明迁移完成。"><meta property="og:url" content="https://timyefi.github.io/posts/excel-model-to-runnable-skill.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.png"><meta property="og:image:width" content="1200"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "把一份 Excel 数据库复刻成一个能跑的东西 · 研究工程笔记", "description": "从一张没人敢动的 Excel 数据库出发：先解剖公式与真值再写代码，把数据、逻辑、判断拆成三层，把不能猜的口径问清楚，最后用可重跑的对账证明迁移完成。", "url": "https://timyefi.github.io/posts/excel-model-to-runnable-skill.html", "inLanguage": "zh-CN", "publisher": {"@type": "Organization", "name": "研究工程笔记"}, "datePublished": "2026-09-12"}</script>
+<style>
+:root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
+ --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
+ --bg:#f6f8fa;--card:#ffffff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+.hero{position:relative;overflow:hidden;color:#fff;isolation:isolate;padding:64px 0 68px;
+ background:linear-gradient(140deg,var(--deep) 0%,var(--navy) 46%,var(--navy2) 100%);
+ border-bottom:1px solid rgba(200,164,92,.32)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.30;
+ background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:46px 46px}
+.hero::after{content:"";position:absolute;z-index:-1;width:760px;height:760px;left:62%;top:-420px;
+ transform:translateX(-50%);border-radius:50%;
+ background:radial-gradient(circle,rgba(200,164,92,.30) 0%,rgba(200,164,92,.08) 42%,transparent 68%)}
+.kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:2.8px;
+ color:var(--gold2);font-weight:600;margin-bottom:18px}
+.kick i{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:block;flex:none}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,4vw,42px);line-height:1.26;font-weight:800;
+ letter-spacing:-.3px}
+.hero h1 .grad{background:linear-gradient(100deg,var(--gold2),#fff7e6 55%,var(--gold2));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;line-height:1.78;max-width:680px}
+.hero nav{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.hero nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;
+ font-size:14px;font-weight:600;transition:.24s}
+.hero nav a.pri{background:linear-gradient(135deg,var(--gold),#b8923f);color:#2a2109;
+ box-shadow:0 8px 22px rgba(200,164,92,.30)}
+.hero nav a.pri:hover{transform:translateY(-2px);text-decoration:none}
+.hero nav a.ghost{background:rgba(255,255,255,.07);color:#dfe8f3;
+ border:1px solid rgba(255,255,255,.22)}
+.hero nav a.ghost:hover{background:rgba(255,255,255,.13);text-decoration:none}
+.hero .stats{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 40px}
+.hero .stats .st{display:flex;align-items:baseline;gap:9px}
+.hero .stats .st b{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero .stats .st span{font-size:13.5px;color:#9fb3c8}
+@media(max-width:640px){.hero .stats{gap:6px 24px;margin-top:24px}
+ .hero .stats .st b{font-size:22px} .hero .stats .st span{font-size:12.5px}}
+
+.sec{margin:52px 0 20px;display:flex;align-items:center;gap:14px}
+.sec i{width:6px;height:30px;border-radius:3px;background:var(--gold);display:block;flex:none}
+.sec h2{margin:0;font-size:22px;letter-spacing:.4px;color:var(--navy)}
+.sec span{color:var(--muted);font-size:12.5px;letter-spacing:2.2px;font-weight:600}
+.sec hr{flex:1;border:0;border-top:1px solid var(--line);margin:0}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(322px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;justify-content:space-between;
+ background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 20px;
+ overflow:hidden;transition:.24s}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;
+ background:linear-gradient(90deg,var(--navy),var(--navy2) 55%,var(--gold))}
+.card::after{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;
+ border-radius:0 3px 3px 0;background:var(--gold);opacity:0;transition:.24s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(11,37,69,.11);
+ border-color:#cfd6de;text-decoration:none}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 8px;font-size:18px;line-height:1.45;color:var(--navy);letter-spacing:.2px}
+.card p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.tag{display:inline-block;font-size:11.5px;letter-spacing:1.6px;font-weight:700;color:var(--gold);
+ border:1px solid rgba(200,164,92,.42);background:rgba(200,164,92,.09);border-radius:999px;
+ padding:2px 11px;white-space:nowrap}
+.when{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.arrow{color:var(--gold);font-weight:700}
+
+.article{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+.article h1{font-size:clamp(24px,3vw,32px);line-height:1.32;margin:0 0 10px;color:var(--navy)}
+.article .meta{color:var(--muted);font-size:13px;margin:0 0 32px;padding-bottom:16px;
+ border-bottom:1px solid var(--line)}
+.article p{margin:0 0 18px;font-size:16.5px;line-height:1.9}
+.article h2{font-size:21px;margin:40px 0 14px;color:var(--navy);padding-bottom:8px;
+ border-bottom:1px solid var(--line)}
+.article h3{font-size:17.5px;margin:32px 0 10px;color:var(--navy)}
+.article hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+.article blockquote{margin:0 0 18px;padding:2px 18px;border-left:3px solid var(--gold);
+ color:var(--muted)}
+.article code{background:#f0f2f5;padding:1px 6px;border-radius:4px;font-size:14px;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace}
+.article pre{background:#0e1c2e;color:#e6edf5;padding:16px 18px;border-radius:10px;overflow:auto}
+.article pre code{background:none;padding:0;color:inherit}
+.article ul,.article ol{padding-left:24px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article .tw{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.article table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+.article th,.article td{border:1px solid var(--line);padding:9px 12px;text-align:left;
+ vertical-align:top}
+.article th{background:#eef2f7;color:var(--navy);font-weight:700;white-space:nowrap}
+.article tbody tr:nth-child(even){background:#fafbfd}
+.article h2,.article h3{scroll-margin-top:18px}
+.article .toc{background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:16px 20px;margin:0 0 30px}
+.article .toc p{margin:0 0 8px;font-size:12.5px;letter-spacing:2px;font-weight:700;
+ color:var(--muted)}
+.article .toc ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+.article .toc a{color:var(--navy2)}
+.article .toc li{margin:0}
+.article .meta .dot{color:#c8d0d9;padding:0 7px}
+.article .tags{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+ display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:26px 0 0}
+.pager a{display:block;border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+ background:#fff;transition:.24s}
+.pager a:hover{border-color:#cfd6de;text-decoration:none;transform:translateY(-1px)}
+.pager .lab{font-size:11.5px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.pager .tt{margin-top:6px;color:var(--navy);font-weight:600;font-size:15px;line-height:1.5}
+.pager .ph{visibility:hidden}
+.article img{max-width:100%;height:auto;border-radius:10px}
+
+footer.site{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;
+ color:var(--muted);font-size:13px}
+footer.site p{margin:0 0 6px}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(286px,1fr))}}
+@media(max-width:640px){
+ .wrap{padding:0 18px} .hero{padding:46px 0 50px} .grid{grid-template-columns:1fr}
+ .card{padding:20px} .article{padding:34px 18px 64px}
+ .pager{grid-template-columns:1fr} .article p{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>把一份 Excel 数据库复刻成一个能跑的东西</h1><p>从一张没人敢动的 Excel 数据库出发：先解剖公式与真值再写代码，把数据、逻辑、判断拆成三层，把不能猜的口径问清楚，最后用可重跑的对账证明迁移完成。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>把一份 Excel 数据库复刻成一个能跑的东西</h1><p class="meta">2026-09-12<span class="dot">·</span>理念与方法论<span class="dot">·</span>约 5 分钟</p><nav class="toc"><p>目录 · CONTENTS</p><ol><li><a href="#一-一张没人敢动的表">一、一张没人敢动的表</a></li><li><a href="#二-先解剖-不要先写">二、先解剖，不要先写</a></li><li><a href="#三-数据-逻辑-判断">三、数据、逻辑、判断</a></li><li><a href="#四-不能猜的四件事">四、不能猜的四件事</a></li><li><a href="#五-对账这件事">五、对账这件事</a></li><li><a href="#六-几个反复出现的小坑">六、几个反复出现的小坑</a></li><li><a href="#七-从哪张表开始">七、从哪张表开始</a></li></ol></nav><h2 id="一-一张没人敢动的表">一、一张没人敢动的表</h2>
+<p>研究员的电脑里通常躺着几张这样的表。打开是一排子表，第一张写口径说明，第二张是取数区，再往下是历史数据，最后一张是模型输出。需要的东西都在里面，但它已经很久没人动过——不是不好用，是没人敢改。改一条公式要顺着引用一路看下去，改一个阈值不知道会影响哪几个结论。</p>
+<p>这类表最值钱的地方，恰恰是它最不方便的地方：口径是活的。什么时候换过基准、哪一年把窗口从三年改成五年、某个格子的数字是从别处抄来的，全都留在公式和批注里，没写进任何文档。研究员可能会忘，公式不会忘。</p>
+<p>所以当我想把一张表变成一个可以被调用、被核对的东西时，第一件要做的事不是重写，而是考古。</p>
+<h2 id="二-先解剖-不要先写">二、先解剖，不要先写</h2>
+<p>最早的冲动是照着自己的记忆写一套代码，算出来差不多就行。这条路试过一次就放弃了：结果跟表里差一点，而我说不清差在哪里。</p>
+<p>后来反过来做。先用只读的方式把工作簿拆开，抽出每一个公式、每一个坐标、每一段批注、以及引用关系，落到一份结构化的中间文件里。这一步不允许猜测，脚本只读文件，读到什么是什么。接着把这份文件压成一份人能读的解剖报告：哪张子表是输入、哪张是公式、公式分成几组、跨表引用指向哪里。</p>
+<p>拿到报告之后再动手，性质就变了。之前是「我大概记得是怎么算的」，现在是「第几行第几列的公式引用了哪几个格子」。<strong>考古的纪律是：能落到公式和值层上的，就不靠回忆。</strong></p>
+<h2 id="三-数据-逻辑-判断">三、数据、逻辑、判断</h2>
+<p>解剖报告摆出来，一张表其实会自然而然地裂成三层。</p>
+<p>最下面一层是数据。取数区那张子表里，一个期限一行、一列一种曲线，这些数字不是算出来的，是从别处搬来的。它们的口径属于取数，不属于模型。</p>
+<p>中间一层是逻辑。把上面的数字变成结论的那些公式：做差、取分位、算周度变化。这一层是确定的，给定输入就只有一个答案。</p>
+<p>最上面一层是判断。阈值定在哪里、什么幅度算异常、什么情况必须先停下来问一句。这一层在表里通常只占几个格子，却是整张表真正属于作者本人的部分。</p>
+<p>有意思的是，另一条路上做出来的一套工具，最后也收敛到同一种切法：输入一层，计算一层，阈值另存成一份规则文件，三者分开放。两条路的出发点并不一样，切出来的边界却一样，说明这不是某种实现偏好，而是这件事本来就这么长。</p>
+<p>拆开的好处不在整齐。改一条公式不动阈值，调一个阈值不用回头动公式——这句话听着平淡，但如果三层是焊在一起的，你能改的就只有整张表，而那等于不能改。</p>
+<h2 id="四-不能猜的四件事">四、不能猜的四件事</h2>
+<p>考古过程中最容易犯的错，是把「看起来像」当成「就是」。有四件事必须在动手之前问清楚，问的是写表的人，不是我自己的直觉。</p>
+<p>一是分位数的历史窗口：近三年还是近五年，含不含当期，按月滚动还是逐日。这一项几乎每张含分位的表都会命中，而且窗口差一年，结论就可能从偏紧翻到中性。</p>
+<p>二是基准：绝对利差对的是国债还是国开债，哪个期限段。表格里往往只写「利差」两个字。</p>
+<p>三是时间锚点：周度变化是本周五比上周五，还是比上周最后一个交易日；碰到节假日怎么处理。</p>
+<p>四是曲线口径：行权收益率还是到期收益率。这一条最隐蔽，公式里看不出来，只能看表头或问人。</p>
+<p>这四件都不是技术问题，是口径问题。写代码的人永远猜不出来，也不该猜——猜错的结果不是报错，是算出一个看起来很正常、实际上不是你要的数字。</p>
+<h2 id="五-对账这件事">五、对账这件事</h2>
+<p>复刻完不算完成，对账通过才算。</p>
+<p>做法很朴素：把表里已经算好的真值抽出来，与复刻程序跑出来的结果逐点比。为此要先准备好真值，最稳的是让 Excel 自己重算一遍并存成副本，这样真值就是公式在原始环境里的产物，而不是我读缓存读出来的东西。</p>
+<p>对账跑下来，利差和周度变化两类对得干干净净，问题出在历史分位上，差在小数点后第三位。原因是那个分位函数有个控制有效位数的参数，默认给的是三位，表格里显示的也是三位，而我的复刻端用了全精度。这个差异本身不重要，重要的是它暴露了一件事：<strong>显示精度和计算结果是两回事</strong>，对账必须比到比显示更深的地方。</p>
+<p>把参数显式调到全精度再跑，两边对到小数点后十二位。到这一步我才可以说迁移完成了，因为这不是「我觉得对了」，是一个可以重跑的检查通过了。</p>
+<h2 id="六-几个反复出现的小坑">六、几个反复出现的小坑</h2>
+<p>第一类是手工覆盖。同一列公式中间，总会有一两个格子是硬填的数字。最常见的例子是「上周五的值」：它不是算出来的，是上周五收盘后有人手工贴进去的。程序在编译时必须把这种格子识别成输入而不是计算，否则每天都会重算一遍，跟人工维护的那个值打架。识别方法也简单，整列都是公式，只有它是常数，那就问一句。</p>
+<p>第二类是插件公式链。取数区很多时候不是静态数值，而是一串数据插件的公式，打开表格时才去拉数。这一层不能硬塞进复刻程序里。正确的做法是先把它落成确定的值，或者接上自己的数据源，让复刻程序只面对一张干净的输入表。</p>
+<p>第三类是幽灵依赖。一条口径用到了某个输入，但这个输入没有写进输入清单，程序换到别人机器上就跑不起来，而报错的地方通常离真正的原因很远。规则只有一条：没有写成契约的输入，等于不存在。</p>
+<h2 id="七-从哪张表开始">七、从哪张表开始</h2>
+<p>不要挑最重要的那张表，挑最小的那张。</p>
+<p>最小的表通常三五张子表、一条公式、两三个阈值。它足够小，可以在一个下午走完解剖、复刻、对账三步；也足够真，能让你在第一次对账失败时，真正看清问题出在口径而不是代码。</p>
+<p>一张表跑通之后，第二步不是去做更复杂的表，而是把三层分开放的做法固定下来。表会越来越多，公式会越来越多，唯一不会膨胀的是那几条真正属于你自己的判断——它们通常只有十几行。</p>
+<p>把一张表复刻成能跑的东西，尽头不是让机器学会算，是让那些原本只存在于公式和记忆里的口径，第一次变成一句可以被追问的话。</p>
+<hr>
+<p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p><div class="tags"><span class="tag">AI</span><span class="tag">Workflow</span><span class="tag">数据工程</span><span class="tag">方法论</span></div><nav class="pager"><span class="ph"></span><a href="this-is-not-the-answer.html"><span class="lab">下一篇 →</span><span class="tt">这不是答案</span></a></nav></main>
+<footer class="site"><div class="wrap">
+  <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
+  <p>研究工程 · AI 工作流 · 本机优先</p>
+</div></footer>
+</body>
+</html>

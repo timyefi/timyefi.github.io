@@ -5,6 +5,14 @@
   <description>关于 AI、Skill 工程化与研究工作方法论的写作</description>
   <language>zh-CN</language>
   <item>
+    <title>把一份 Excel 数据库复刻成一个能跑的东西</title>
+    <link>https://timyefi.github.io/posts/excel-model-to-runnable-skill.html</link>
+    <guid isPermaLink="true">https://timyefi.github.io/posts/excel-model-to-runnable-skill.html</guid>
+    <pubDate>Sat, 12 Sep 2026 08:00:00 +0800</pubDate>
+    <category>理念与方法论</category>
+    <description>从一张没人敢动的 Excel 数据库出发：先解剖公式与真值再写代码，把数据、逻辑、判断拆成三层，把不能猜的口径问清楚，最后用可重跑的对账证明迁移完成。</description>
+  </item>
+  <item>
     <title>这不是答案</title>
     <link>https://timyefi.github.io/posts/this-is-not-the-answer.html</link>
     <guid isPermaLink="true">https://timyefi.github.io/posts/this-is-not-the-answer.html</guid>
