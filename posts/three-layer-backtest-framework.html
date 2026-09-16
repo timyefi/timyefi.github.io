@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>回测框架为什么要分三层 · 研究工程笔记</title>
+<meta name="description" content="把回测写成一段脚本，数字变了却说不出为什么变；拆成数据层、逻辑层、判断层之后，六类常见错误各自有了明确的落点，改一个阈值不必重跑取数，策略能不能发布也第一次有了统一的出口。">
+<link rel="canonical" href="https://timyefi.github.io/posts/three-layer-backtest-framework.html"><link rel="icon" href="../assets/icon.svg" type="image/svg+xml"><link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="研究工程笔记" href="https://timyefi.github.io/feed.xml"><meta name="theme-color" content="#0b2545"><meta property="og:type" content="article"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="回测框架为什么要分三层 · 研究工程笔记"><meta property="og:description" content="把回测写成一段脚本，数字变了却说不出为什么变；拆成数据层、逻辑层、判断层之后，六类常见错误各自有了明确的落点，改一个阈值不必重跑取数，策略能不能发布也第一次有了统一的出口。"><meta property="og:url" content="https://timyefi.github.io/posts/three-layer-backtest-framework.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.png"><meta property="og:image:width" content="1200"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "回测框架为什么要分三层 · 研究工程笔记", "description": "把回测写成一段脚本，数字变了却说不出为什么变；拆成数据层、逻辑层、判断层之后，六类常见错误各自有了明确的落点，改一个阈值不必重跑取数，策略能不能发布也第一次有了统一的出口。", "url": "https://timyefi.github.io/posts/three-layer-backtest-framework.html", "inLanguage": "zh-CN", "publisher": {"@type": "Organization", "name": "研究工程笔记"}, "datePublished": "2026-09-16"}</script>
+<style>
+:root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
+ --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
+ --bg:#f6f8fa;--card:#ffffff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+.hero{position:relative;overflow:hidden;color:#fff;isolation:isolate;padding:64px 0 68px;
+ background:linear-gradient(140deg,var(--deep) 0%,var(--navy) 46%,var(--navy2) 100%);
+ border-bottom:1px solid rgba(200,164,92,.32)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.30;
+ background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:46px 46px}
+.hero::after{content:"";position:absolute;z-index:-1;width:760px;height:760px;left:62%;top:-420px;
+ transform:translateX(-50%);border-radius:50%;
+ background:radial-gradient(circle,rgba(200,164,92,.30) 0%,rgba(200,164,92,.08) 42%,transparent 68%)}
+.kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:2.8px;
+ color:var(--gold2);font-weight:600;margin-bottom:18px}
+.kick i{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:block;flex:none}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,4vw,42px);line-height:1.26;font-weight:800;
+ letter-spacing:-.3px}
+.hero h1 .grad{background:linear-gradient(100deg,var(--gold2),#fff7e6 55%,var(--gold2));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;line-height:1.78;max-width:680px}
+.hero nav{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.hero nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;
+ font-size:14px;font-weight:600;transition:.24s}
+.hero nav a.pri{background:linear-gradient(135deg,var(--gold),#b8923f);color:#2a2109;
+ box-shadow:0 8px 22px rgba(200,164,92,.30)}
+.hero nav a.pri:hover{transform:translateY(-2px);text-decoration:none}
+.hero nav a.ghost{background:rgba(255,255,255,.07);color:#dfe8f3;
+ border:1px solid rgba(255,255,255,.22)}
+.hero nav a.ghost:hover{background:rgba(255,255,255,.13);text-decoration:none}
+.hero .stats{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 40px}
+.hero .stats .st{display:flex;align-items:baseline;gap:9px}
+.hero .stats .st b{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero .stats .st span{font-size:13.5px;color:#9fb3c8}
+@media(max-width:640px){.hero .stats{gap:6px 24px;margin-top:24px}
+ .hero .stats .st b{font-size:22px} .hero .stats .st span{font-size:12.5px}}
+
+.sec{margin:52px 0 20px;display:flex;align-items:center;gap:14px}
+.sec i{width:6px;height:30px;border-radius:3px;background:var(--gold);display:block;flex:none}
+.sec h2{margin:0;font-size:22px;letter-spacing:.4px;color:var(--navy)}
+.sec span{color:var(--muted);font-size:12.5px;letter-spacing:2.2px;font-weight:600}
+.sec hr{flex:1;border:0;border-top:1px solid var(--line);margin:0}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(322px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;justify-content:space-between;
+ background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 20px;
+ overflow:hidden;transition:.24s}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;
+ background:linear-gradient(90deg,var(--navy),var(--navy2) 55%,var(--gold))}
+.card::after{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;
+ border-radius:0 3px 3px 0;background:var(--gold);opacity:0;transition:.24s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(11,37,69,.11);
+ border-color:#cfd6de;text-decoration:none}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 8px;font-size:18px;line-height:1.45;color:var(--navy);letter-spacing:.2px}
+.card p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.tag{display:inline-block;font-size:11.5px;letter-spacing:1.6px;font-weight:700;color:var(--gold);
+ border:1px solid rgba(200,164,92,.42);background:rgba(200,164,92,.09);border-radius:999px;
+ padding:2px 11px;white-space:nowrap}
+.when{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.arrow{color:var(--gold);font-weight:700}
+
+.article{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+.article h1{font-size:clamp(24px,3vw,32px);line-height:1.32;margin:0 0 10px;color:var(--navy)}
+.article .meta{color:var(--muted);font-size:13px;margin:0 0 32px;padding-bottom:16px;
+ border-bottom:1px solid var(--line)}
+.article p{margin:0 0 18px;font-size:16.5px;line-height:1.9}
+.article h2{font-size:21px;margin:40px 0 14px;color:var(--navy);padding-bottom:8px;
+ border-bottom:1px solid var(--line)}
+.article h3{font-size:17.5px;margin:32px 0 10px;color:var(--navy)}
+.article hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+.article blockquote{margin:0 0 18px;padding:2px 18px;border-left:3px solid var(--gold);
+ color:var(--muted)}
+.article code{background:#f0f2f5;padding:1px 6px;border-radius:4px;font-size:14px;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace}
+.article pre{background:#0e1c2e;color:#e6edf5;padding:16px 18px;border-radius:10px;overflow:auto}
+.article pre code{background:none;padding:0;color:inherit}
+.article ul,.article ol{padding-left:24px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article .tw{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.article table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+.article th,.article td{border:1px solid var(--line);padding:9px 12px;text-align:left;
+ vertical-align:top}
+.article th{background:#eef2f7;color:var(--navy);font-weight:700;white-space:nowrap}
+.article tbody tr:nth-child(even){background:#fafbfd}
+.article h2,.article h3{scroll-margin-top:18px}
+.article .toc{background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:16px 20px;margin:0 0 30px}
+.article .toc p{margin:0 0 8px;font-size:12.5px;letter-spacing:2px;font-weight:700;
+ color:var(--muted)}
+.article .toc ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+.article .toc a{color:var(--navy2)}
+.article .toc li{margin:0}
+.article .meta .dot{color:#c8d0d9;padding:0 7px}
+.article .tags{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+ display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:26px 0 0}
+.pager a{display:block;border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+ background:#fff;transition:.24s}
+.pager a:hover{border-color:#cfd6de;text-decoration:none;transform:translateY(-1px)}
+.pager .lab{font-size:11.5px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.pager .tt{margin-top:6px;color:var(--navy);font-weight:600;font-size:15px;line-height:1.5}
+.pager .ph{visibility:hidden}
+.article img{max-width:100%;height:auto;border-radius:10px}
+
+footer.site{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;
+ color:var(--muted);font-size:13px}
+footer.site p{margin:0 0 6px}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(286px,1fr))}}
+@media(max-width:640px){
+ .wrap{padding:0 18px} .hero{padding:46px 0 50px} .grid{grid-template-columns:1fr}
+ .card{padding:20px} .article{padding:34px 18px 64px}
+ .pager{grid-template-columns:1fr} .article p{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>回测框架为什么要分三层</h1><p>把回测写成一段脚本，数字变了却说不出为什么变；拆成数据层、逻辑层、判断层之后，六类常见错误各自有了明确的落点，改一个阈值不必重跑取数，策略能不能发布也第一次有了统一的出口。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>回测框架为什么要分三层</h1><p class="meta">2026-09-16<span class="dot">·</span>理念与方法论<span class="dot">·</span>约 6 分钟</p><nav class="toc"><p>目录 · CONTENTS</p><ol><li><a href="#一-一个说不清哪里错了的结果">一、一个说不清哪里错了的结果</a></li><li><a href="#二-把一条链切成三段">二、把一条链切成三段</a></li><li><a href="#三-分开之后-问题才变得可以回答">三、分开之后，问题才变得可以回答</a></li><li><a href="#四-有三件事必须在引擎里写死">四、有三件事必须在引擎里写死</a></li><li><a href="#五-判断层凭什么要单独成层">五、判断层凭什么要单独成层</a></li><li><a href="#六-分层不是免费的">六、分层不是免费的</a></li><li><a href="#七-从哪一层开始">七、从哪一层开始</a></li></ol></nav><h2 id="一-一个说不清哪里错了的结果">一、一个说不清哪里错了的结果</h2>
+<p>写回测最省事的做法，是从取数到出净值一口气写完：拉行情、算信号、按信号买卖、统计收益，一段脚本从头跑到尾。第一次跑通的时候感觉很好，因为屏幕上出现了一个数字，而这个数字看起来像是证据。</p>
+<p>问题要到第二次运行才暴露。把参数换一下，或者把数据补一天，净值变了。变了多少看得见，为什么变看不见——是行情口径动了，是成交价换了日子，还是信号本身就不稳？三种可能混在同一个数字里，没有任何办法把它们分开。</p>
+<p>回测出错的地方本来就不止一处。常见的有六类：用当日收盘的信号在当日成交，这是前视；用今天还存续的券池去回溯历史，这是幸存者偏差；滚动窗口用了中心对齐，这是未来函数；复权价前后混用；成本漏算；以及拿债券的估值中间价当成可以成交的价格。这六类不住在同一个地方，它们分别藏在取数、撮合和判断三个环节里。把三个环节焊成一段脚本，等于把六种病因装进一个不透明的盒子，之后每一次追问都只能靠重跑和猜测来回答。</p>
+<h2 id="二-把一条链切成三段">二、把一条链切成三段</h2>
+<p>后来我把这条链拆成三层，每层只对一件事负责。</p>
+<p>最下面一层是数据层。它只做一件事：把不同来源、不同形状的行情，统一成同一张日期乘代码的宽表。固收个券的估值、隐含评级与余额，债券指数与股票指数的日行情，ETF 的复权价与净值，个股的前复权价——四类资产进来，一张表出去。这层结束，取数就结束了。</p>
+<p>中间一层是逻辑层，也就是账户与撮合。它不知道自己在回测什么资产，只消费上面那张宽表和一组目标权重，再把权重翻译成真实的成交记录。资产无关是这一层的前提，也是同一套引擎能覆盖四类资产的原因。</p>
+<p>最上面一层是判断层，装三样东西：信号、组合构建、可信度验收。它只输出权重，不碰现金，也不碰成交价。</p>
+<p>拆完之后一个很直观的变化是每层的体量：引擎两百四十多行，内置策略一百二十多行，可信度验收两百七十多行，数据路由五百行出头，全部业务框架合起来十二个，每层四个。每层都是一个人一个下午能读完的规模。这件事的意义不在于代码好看，而在于任何一层出问题时，我知道该打开哪个文件。</p>
+<h2 id="三-分开之后-问题才变得可以回答">三、分开之后，问题才变得可以回答</h2>
+<p>第一个能回答的问题是成本吃掉多少。成本在引擎里是一行公式：固定佣金加滑点，再加一项按成交额占比开方的冲击。这个公式的位置是唯一的，所以把成本设成零再跑一遍，两条净值曲线之间的差就是成本。合在一起写的脚本里，成本散落在每一处买卖的加减上，想单独剥出来，只能改代码。</p>
+<p>第二个是改一个阈值要不要重跑取数。判断层的策略只输出一个权重字典，改阈值不触碰数据层，取数结果因此可以缓存、可以复用，改一次参数的成本是秒级的。</p>
+<p>第三个，也是最关键的，是哪一层错了。三层各自有各自的症状：数据层出错，表现是某个代码在某一天没有数据，或者同一只券在表里出现两行；逻辑层出错，表现是成交价用了不该用的那一天；判断层出错，表现是样本内漂亮、样本外塌掉。三种症状指向三个不同的文件，而不是指向同一段几百行的脚本。</p>
+<h2 id="四-有三件事必须在引擎里写死">四、有三件事必须在引擎里写死</h2>
+<p>分层解决不了的，是那些写错一次就全盘无效的规则。这类规则只能放进引擎，不能指望写策略的人每次都记得。</p>
+<p>第一件是成交价必须来自未来。引擎里策略拿到的上下文只暴露到当日为止，撮合在下一个交易日用开盘价完成。这条规则的位置在接口本身，写策略的人没有途径读到后面的数据。</p>
+<p>第二件是停牌和涨跌停不能成交。这里靠一张可交易掩膜挡住，买不进也卖不出，而不是用一个理想价格假装成交。</p>
+<p>第三件是债券的估值价不等于成交价。这条机器挡不住，因为估值中间价在数据层面完全正常。唯一的办法是在报告里显式写下这个假设，让读结论的人自己决定要不要打折。</p>
+<h2 id="五-判断层凭什么要单独成层">五、判断层凭什么要单独成层</h2>
+<p>判断层独立的理由很直接：验收需要一个统一的门槛。</p>
+<p>如果信号和撮合焊在一起，每套策略都可以用自己顺手的方式算出漂亮的数字，而没有一个地方能统一地问一句：这个数字是不是从上万次尝试里挑出来的最好的那一次。</p>
+<p>现在的门槛是三件事同时成立：多重试验校正后的可信度不低于 0.9，滚动样本外的夏普不低于 0.5，过拟合概率不超过一半。第一条有个容易被忽略的前置条件——必须如实记录试验次数。调了二十组参数再报最优结果，和只跑了一组就报结果，考验的不是同一个东西。</p>
+<p>用这套流程跑的第一个策略是 ETF 动量轮动，八只宽基与行业 ETF，从 2021 年初到 2026 年 8 月。结果是年化 7.79%、夏普 0.31、最大回撤 21.9%，配十三折滚动样本外。</p>
+<p>把这组数字交给门槛，结论是不该发布。夏普 0.31 离门槛里那条绝对线（夏普 1.0）差着三倍不止。这其实是这套结构第一次跑通时最值钱的产出：它没有给出一个能赚钱的策略，给出的是一个不能发布的判定，而且这个判定有可以逐条追问的出处。</p>
+<h2 id="六-分层不是免费的">六、分层不是免费的</h2>
+<p>代价有三个。</p>
+<p>一是契约。三层之间靠一张宽表相连，这张表的字段一旦定下来，所有数据源都得按它输出。债券要多给收益率、久期、评级和余额四列，ETF 要多给净值与复权价，这些约定写下来容易，维护起来要一直盯着。</p>
+<p>二是边界会被反复越界。最常见的诱惑是在数据层做筛选，比如只取某个评级以上的券。这样做很自然，但它把幸存者偏差搬进了数据层，而判断层完全看不见——数据层交出来的表本身就是干净的，干净得看不出筛选发生在哪一天。所以数据层只做三件事：取全、对齐、去重。券池怎么形成属于判断层，而且只能用当日可见的信息。</p>
+<p>三是你会想把它再拆细。这个方向的尽头是每层四块，块与块之间再定接口。拆到这一步，好处是每一小块都能单独验收，代价是接口数量跟着涨。对一个人的回测框架来说，四乘三这个粒度大体够用，再细下去，维护接口的时间会超过写策略的时间。</p>
+<h2 id="七-从哪一层开始">七、从哪一层开始</h2>
+<p>如果要新搭一套回测，我的顺序是先写契约，再写引擎，最后写策略。</p>
+<p>契约就是那张宽表：哪些字段、什么类型、日期怎么对齐。定了它，数据层就有了验收标准，逻辑层可以在不知道数据来源的情况下开工。</p>
+<p>策略那一侧的接口只留一个方法：给定当前上下文，返回目标权重。加一个新策略等于加一个类，不动引擎，也不动数据。</p>
+<p>第一件要跑的是等权基准，先放策略是后面的事。没有基准的回测数字没有意义，而基准恰好是验证下面两层有没有写错的最便宜方式——如果等权组合的净值都跑不出合理的形状，问题一定不在策略上。</p>
+<p>三层分开的尽头，落在「这个结果能不能信」这件事上：它从一个态度问题变成流程问题。前者问的是人够不够谨慎，后者问的是流程有没有出口。</p>
+<hr>
+<p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p><div class="tags"><span class="tag">AI</span><span class="tag">回测</span><span class="tag">研究方法</span><span class="tag">方法论</span></div><nav class="pager"><span class="ph"></span><a href="retrieval-cheaper-than-reread.html"><span class="lab">下一篇 →</span><span class="tt">检索为什么比重新读一遍便宜</span></a></nav></main>
+<footer class="site"><div class="wrap">
+  <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
+  <p>研究工程 · AI 工作流 · 本机优先</p>
+</div></footer>
+</body>
+</html>
