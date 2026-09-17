@@ -5,6 +5,14 @@
   <description>关于 AI、Skill 工程化与研究工作方法论的写作</description>
   <language>zh-CN</language>
   <item>
+    <title>缓存字节数正在取代单价</title>
+    <link>https://timyefi.github.io/posts/cache-bytes-over-price.html</link>
+    <guid isPermaLink="true">https://timyefi.github.io/posts/cache-bytes-over-price.html</guid>
+    <pubDate>Thu, 17 Sep 2026 08:00:00 +0800</pubDate>
+    <category>理念与方法论</category>
+    <description>Agent 成本的一等指标正从每百万 token 单价换到每 token 缓存字节数；前缀被击穿时命中量会钉在常数上，这个指纹不依赖任何口径。</description>
+  </item>
+  <item>
     <title>回测框架为什么要分三层</title>
     <link>https://timyefi.github.io/posts/three-layer-backtest-framework.html</link>
     <guid isPermaLink="true">https://timyefi.github.io/posts/three-layer-backtest-framework.html</guid>
