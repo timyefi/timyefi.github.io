@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>把 AI 风险分散到 AI 之外 · 研究工程笔记</title>
+<meta name="description" content="名义八个资产的有效风险源只有 2.79 个；分散的空间上界等于权重乘类内波动跨度，按这条公式，AI 内部分散能起多大作用取决于相关性与权重，不取决于名字多少。">
+<link rel="canonical" href="https://timyefi.github.io/posts/ai-risk-beyond-ai.html"><link rel="icon" href="../assets/icon.svg" type="image/svg+xml"><link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="研究工程笔记" href="https://timyefi.github.io/feed.xml"><meta name="theme-color" content="#0b2545"><meta property="og:type" content="article"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="把 AI 风险分散到 AI 之外 · 研究工程笔记"><meta property="og:description" content="名义八个资产的有效风险源只有 2.79 个；分散的空间上界等于权重乘类内波动跨度，按这条公式，AI 内部分散能起多大作用取决于相关性与权重，不取决于名字多少。"><meta property="og:url" content="https://timyefi.github.io/posts/ai-risk-beyond-ai.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.png"><meta property="og:image:width" content="1200"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "把 AI 风险分散到 AI 之外 · 研究工程笔记", "description": "名义八个资产的有效风险源只有 2.79 个；分散的空间上界等于权重乘类内波动跨度，按这条公式，AI 内部分散能起多大作用取决于相关性与权重，不取决于名字多少。", "url": "https://timyefi.github.io/posts/ai-risk-beyond-ai.html", "inLanguage": "zh-CN", "publisher": {"@type": "Organization", "name": "研究工程笔记"}, "datePublished": "2026-09-18"}</script>
+<style>
+:root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
+ --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
+ --bg:#f6f8fa;--card:#ffffff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+.hero{position:relative;overflow:hidden;color:#fff;isolation:isolate;padding:64px 0 68px;
+ background:linear-gradient(140deg,var(--deep) 0%,var(--navy) 46%,var(--navy2) 100%);
+ border-bottom:1px solid rgba(200,164,92,.32)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.30;
+ background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:46px 46px}
+.hero::after{content:"";position:absolute;z-index:-1;width:760px;height:760px;left:62%;top:-420px;
+ transform:translateX(-50%);border-radius:50%;
+ background:radial-gradient(circle,rgba(200,164,92,.30) 0%,rgba(200,164,92,.08) 42%,transparent 68%)}
+.kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:2.8px;
+ color:var(--gold2);font-weight:600;margin-bottom:18px}
+.kick i{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:block;flex:none}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,4vw,42px);line-height:1.26;font-weight:800;
+ letter-spacing:-.3px}
+.hero h1 .grad{background:linear-gradient(100deg,var(--gold2),#fff7e6 55%,var(--gold2));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;line-height:1.78;max-width:680px}
+.hero nav{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.hero nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;
+ font-size:14px;font-weight:600;transition:.24s}
+.hero nav a.pri{background:linear-gradient(135deg,var(--gold),#b8923f);color:#2a2109;
+ box-shadow:0 8px 22px rgba(200,164,92,.30)}
+.hero nav a.pri:hover{transform:translateY(-2px);text-decoration:none}
+.hero nav a.ghost{background:rgba(255,255,255,.07);color:#dfe8f3;
+ border:1px solid rgba(255,255,255,.22)}
+.hero nav a.ghost:hover{background:rgba(255,255,255,.13);text-decoration:none}
+.hero .stats{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 40px}
+.hero .stats .st{display:flex;align-items:baseline;gap:9px}
+.hero .stats .st b{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero .stats .st span{font-size:13.5px;color:#9fb3c8}
+@media(max-width:640px){.hero .stats{gap:6px 24px;margin-top:24px}
+ .hero .stats .st b{font-size:22px} .hero .stats .st span{font-size:12.5px}}
+
+.sec{margin:52px 0 20px;display:flex;align-items:center;gap:14px}
+.sec i{width:6px;height:30px;border-radius:3px;background:var(--gold);display:block;flex:none}
+.sec h2{margin:0;font-size:22px;letter-spacing:.4px;color:var(--navy)}
+.sec span{color:var(--muted);font-size:12.5px;letter-spacing:2.2px;font-weight:600}
+.sec hr{flex:1;border:0;border-top:1px solid var(--line);margin:0}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(322px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;justify-content:space-between;
+ background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 20px;
+ overflow:hidden;transition:.24s}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;
+ background:linear-gradient(90deg,var(--navy),var(--navy2) 55%,var(--gold))}
+.card::after{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;
+ border-radius:0 3px 3px 0;background:var(--gold);opacity:0;transition:.24s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(11,37,69,.11);
+ border-color:#cfd6de;text-decoration:none}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 8px;font-size:18px;line-height:1.45;color:var(--navy);letter-spacing:.2px}
+.card p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.tag{display:inline-block;font-size:11.5px;letter-spacing:1.6px;font-weight:700;color:var(--gold);
+ border:1px solid rgba(200,164,92,.42);background:rgba(200,164,92,.09);border-radius:999px;
+ padding:2px 11px;white-space:nowrap}
+.when{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.arrow{color:var(--gold);font-weight:700}
+
+.article{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+.article h1{font-size:clamp(24px,3vw,32px);line-height:1.32;margin:0 0 10px;color:var(--navy)}
+.article .meta{color:var(--muted);font-size:13px;margin:0 0 32px;padding-bottom:16px;
+ border-bottom:1px solid var(--line)}
+.article p{margin:0 0 18px;font-size:16.5px;line-height:1.9}
+.article h2{font-size:21px;margin:40px 0 14px;color:var(--navy);padding-bottom:8px;
+ border-bottom:1px solid var(--line)}
+.article h3{font-size:17.5px;margin:32px 0 10px;color:var(--navy)}
+.article hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+.article blockquote{margin:0 0 18px;padding:2px 18px;border-left:3px solid var(--gold);
+ color:var(--muted)}
+.article code{background:#f0f2f5;padding:1px 6px;border-radius:4px;font-size:14px;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace}
+.article pre{background:#0e1c2e;color:#e6edf5;padding:16px 18px;border-radius:10px;overflow:auto}
+.article pre code{background:none;padding:0;color:inherit}
+.article ul,.article ol{padding-left:24px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article .tw{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.article table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+.article th,.article td{border:1px solid var(--line);padding:9px 12px;text-align:left;
+ vertical-align:top}
+.article th{background:#eef2f7;color:var(--navy);font-weight:700;white-space:nowrap}
+.article tbody tr:nth-child(even){background:#fafbfd}
+.article h2,.article h3{scroll-margin-top:18px}
+.article .toc{background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:16px 20px;margin:0 0 30px}
+.article .toc p{margin:0 0 8px;font-size:12.5px;letter-spacing:2px;font-weight:700;
+ color:var(--muted)}
+.article .toc ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+.article .toc a{color:var(--navy2)}
+.article .toc li{margin:0}
+.article .meta .dot{color:#c8d0d9;padding:0 7px}
+.article .tags{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+ display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:26px 0 0}
+.pager a{display:block;border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+ background:#fff;transition:.24s}
+.pager a:hover{border-color:#cfd6de;text-decoration:none;transform:translateY(-1px)}
+.pager .lab{font-size:11.5px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.pager .tt{margin-top:6px;color:var(--navy);font-weight:600;font-size:15px;line-height:1.5}
+.pager .ph{visibility:hidden}
+.article img{max-width:100%;height:auto;border-radius:10px}
+
+footer.site{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;
+ color:var(--muted);font-size:13px}
+footer.site p{margin:0 0 6px}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(286px,1fr))}}
+@media(max-width:640px){
+ .wrap{padding:0 18px} .hero{padding:46px 0 50px} .grid{grid-template-columns:1fr}
+ .card{padding:20px} .article{padding:34px 18px 64px}
+ .pager{grid-template-columns:1fr} .article p{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>把 AI 风险分散到 AI 之外</h1><p>名义八个资产的有效风险源只有 2.79 个；分散的空间上界等于权重乘类内波动跨度，按这条公式，AI 内部分散能起多大作用取决于相关性与权重，不取决于名字多少。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>把 AI 风险分散到 AI 之外</h1><p class="meta">2026-09-18<span class="dot">·</span>理念与方法论<span class="dot">·</span>约 5 分钟</p><nav class="toc"><p>目录 · CONTENTS</p><ol><li><a href="#一-一句没人反对的话-落到执行就断了">一、一句没人反对的话，落到执行就断了</a></li><li><a href="#二-名义八个资产-有效资产数-2-79">二、名义八个资产，有效资产数 2.79</a></li><li><a href="#三-加资产不等于降波">三、加资产不等于降波</a></li><li><a href="#四-上界公式-权重乘类内波动跨度">四、上界公式：权重乘类内波动跨度</a></li><li><a href="#五-上界用不满的那一类-换的是久期">五、上界用不满的那一类，换的是久期</a></li><li><a href="#六-把这条公式套回-AI">六、把这条公式套回 AI</a></li><li><a href="#七-落到可操作的三步">七、落到可操作的三步</a></li></ol></nav><h2 id="一-一句没人反对的话-落到执行就断了">一、一句没人反对的话，落到执行就断了</h2>
+<p>J.P. Morgan Asset Management 在前几天的一篇配置札记里给了一个判断：这一轮 AI 资本开支的规模与推进速度都超过以往任何一次科技投入周期，超额机会、极端估值、剧烈波动和大范围颠覆会同时出现；而历史上科技潮的早期领先者常被颠覆，最终的结局分岔极大，有的行业长期混战整合，有的迅速收敛到一家独大。由此它给出两条并列的动作：在 AI 内部做分散，以及在 AI 之外做分散。</p>
+<p>这句话不好反驳。但它到不了执行层。AI 内部具体指什么，算力、模型、应用，还是往下再拆到电力、光模块、数据中心融资？AI 之外又指什么，债券、黄金、商品？如果答案是「把更多名字写进配置表」，那它默认了一件事：名字多就等于分散。这件事恰恰是最该被检验的。</p>
+<h2 id="二-名义八个资产-有效资产数-2-79">二、名义八个资产，有效资产数 2.79</h2>
+<p>我在组合侧做过多轮实测。数据是全市场 ETF 日行情，从两千多只里按上市年限和成交额筛出可投池，再按名称去重，最后落在几百只标的、六百多个交易日上。做法本身没有新意，有价值的是把「分散」折算成一个数之后看到的形状。</p>
+<p>一个典型的「多资产」组合，名义上装着八个资产：沪深300、中证500、创业板指，加上海外权益、商品、债券。把它们的两两相关性算出来，宽基之间的读数落在 0.90 到 0.91。按有效资产数的口径折算，这个名义八资产的组合，实际的独立风险源只有 2.79 个（口径：2018 年 1 月至 2026 年 9 月，2092 个交易日）。</p>
+<p>这个数字比任何定性描述都有用。它说的是：配置表上写了八个格子，市场给你的独立赌注不到三个。</p>
+<h2 id="三-加资产不等于降波">三、加资产不等于降波</h2>
+<p>顺着这个口径往下追，会碰到一件反直觉的事。</p>
+<p>沪深300 单独一只，年化波动 18.66%。按「多买几只宽基更分散」的直觉，加上中证500 和创业板50 变成三只等权，波动应该更低。实测结果相反，升到 26.09%，比单只高了七个多百分点。</p>
+<p>这不是数据出错。沪深300 里银行、非银、白酒占比高，本身就是低波资产；把它拆成三只等权，等于主动把仓位挪向波动更高的那一端。把权益腿从那三只宽基换成十二个细分行业等权，波动只从 26.09% 降到 23.55%；一直扩到全部 A 股行业与主题共 253 只等权，波动 20.99%，有效资产数从 1.10 升到 1.79（口径：2023 年 10 月 31 日至 2026 年 9 月 4 日，已跳过 60 个交易日的波动率暖机期）。</p>
+<p>两百多只标的，换来的独立风险源不到 1.8 个。拆细确实压低了相关性，但压低的是相关性，不是波动。</p>
+<h2 id="四-上界公式-权重乘类内波动跨度">四、上界公式：权重乘类内波动跨度</h2>
+<p>到这里需要一个能算的判据，否则每次都要把回测重跑一遍。把组合骨架固定成权益三成、商品一成、债券六成，每次只换其中一条腿，就会得到一个很干净的量：</p>
+<p>空间上界等于该腿的组合权重乘以该腿内部的波动率跨度。</p>
+<p>三个大类的读数如下。</p>
+<div class="tw"><table><thead><tr><th>大类</th><th>只数</th><th>组合权重</th><th>类内波动区间</th><th>波动跨度</th><th>类内平均相关</th><th>空间上界</th><th>实测极差</th></tr></thead><tbody><tr><td>债券</td><td>12</td><td>60%</td><td>0.21% 至 6.73%</td><td>6.51%</td><td>0.61</td><td>3.91%</td><td>0.78pp</td></tr><tr><td>权益</td><td>253</td><td>30%</td><td>12.85% 至 46.23%</td><td>33.37%</td><td>0.56</td><td>10.01%</td><td>3.88pp</td></tr><tr><td>商品</td><td>28</td><td>10%</td><td>16.97% 至 40.99%</td><td>24.02%</td><td>0.46</td><td>2.40%</td><td>未测</td></tr></tbody></table></div>
+<p>（表为只换单腿的组合级极差；口径：2023 年 10 月 31 日至 2026 年 9 月 4 日。）</p>
+<p>一句话解释这张表：债券的权重最大但跨度最小，商品的跨度大但权重最小，只有权益是两项都不弱的。所以「优化空间」在配置层面几乎等价于「权益内部的重新分配」。</p>
+<h2 id="五-上界用不满的那一类-换的是久期">五、上界用不满的那一类，换的是久期</h2>
+<p>上界是天花板，实测极差是真正拿到了多少。这两列放在一起看，才是这条判据最有用之处。</p>
+<p>债券的上界是 3.91 个百分点，实测极差只有 0.78 个百分点，用掉五分之一。原因是类内平均相关 0.61：换一只债基，改变的是久期暴露，不是风险来源。久期是同一个东西的不同刻度，在刻度上来回换，组合面对的风险因子没有变。</p>
+<p>权益的类内相关同为 0.56，但九个方向之间由产业周期、政策、利率敏感度、外需这些彼此独立的因素驱动，换构成能真正换掉风险源。商品的问题在覆盖太窄：国内商品 ETF 只有贵金属、能源化工、工业品三个方向，贵金属 11 只的波动率区间只有 21.51% 到 22.01%，28 只商品 ETF 覆盖的独立风险源不超过三个。</p>
+<h2 id="六-把这条公式套回-AI">六、把这条公式套回 AI</h2>
+<p>回到开头那两条动作。它们其实是同一个上界问题。</p>
+<p>AI 内部的分散能起多大作用，取决于三件事算出来各是多少：AI 相关暴露在组合里占多大权重；算力、模型、应用、电力、数据中心融资这些子方向各自的波动率跨度有多大；以及它们之间的平均相关是 0.56 还是 0.90。</p>
+<p>如果这几个子方向的相关性像宽基一样落在 0.9 附近，那配十个名字还是二十个名字，有效风险源都只有一个，AI 内部的分散就停在名义上。反过来，如果它们确实由独立因素驱动，那杠杆是实在的，而且会比权益那一栏更大，因为 AI 相关暴露在一个真实组合里的权重往往远不止三成。</p>
+<p>AI 之外的分散同理，判据是相关性够不够低，不是资产类别够不够多。实测里标普500 与沪深300 的相关是 0.16，原油与沪深300 是 −0.23，这两个读数才是它们值钱的地方；原油的波动率是 54%，所以配比必须压到很小。把「AI 之外」理解成「多买几个低相关的资产类别」，方向是对的，执行上仍然要过同一道计算。</p>
+<h2 id="七-落到可操作的三步">七、落到可操作的三步</h2>
+<p>第一步是把暴露算清楚。列一份真金白银的暴露表：AI 相关的权益、AI 相关的信用、给 AI 基建放款的敞口，各自占多少，先算权重再谈分散。这一步做完，通常会发现「AI 之外」没有你以为的那么多，因为不少看着无关的资产，收入端连着同一条资本开支。</p>
+<p>第二步是给每个子方向算两两相关，算完再决定要不要加名字。这一步的产出是一个有效资产数，配置表的长度在这里帮不上忙。加名字之前先问一句：加上它，有效资产数从多少变到多少。如果不动，这个名字只增加了后续的解释成本。</p>
+<p>第三步是把「权重乘类内波动跨度」当筛选器用。它告诉你哪条腿值得花时间：同样是一周的研究工时，投在类内跨度大、权重也高的那条腿上，回报可以是投在另一条腿上的五倍。</p>
+<hr>
+<p><em>文中观点仅为个人实践观察，不构成任何投资建议。</em></p><div class="tags"><span class="tag">AI</span><span class="tag">资产配置</span><span class="tag">分散</span><span class="tag">研究方法</span></div><nav class="pager"><span class="ph"></span><a href="cache-bytes-over-price.html"><span class="lab">下一篇 →</span><span class="tt">缓存字节数正在取代单价</span></a></nav></main>
+<footer class="site"><div class="wrap">
+  <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
+  <p>研究工程 · AI 工作流 · 本机优先</p>
+</div></footer>
+</body>
+</html>
