@@ -5,6 +5,14 @@
   <description>关于 AI、Skill 工程化与研究工作方法论的写作</description>
   <language>zh-CN</language>
   <item>
+    <title>Agent 开始自己改代码之后，投研的信任边界在哪里</title>
+    <link>https://timyefi.github.io/posts/agent-trust-boundary.html</link>
+    <guid isPermaLink="true">https://timyefi.github.io/posts/agent-trust-boundary.html</guid>
+    <pubDate>Tue, 22 Sep 2026 08:00:00 +0800</pubDate>
+    <category>理念与方法论</category>
+    <description>从三次亲历事故出发：读不全不许写、覆盖前先能还原、判据取地面真值、闸门不可达按未通过；Agent 会写会改之后，信任边界该画在权限上，不是画在输出上。</description>
+  </item>
+  <item>
     <title>把 AI 风险分散到 AI 之外</title>
     <link>https://timyefi.github.io/posts/ai-risk-beyond-ai.html</link>
     <guid isPermaLink="true">https://timyefi.github.io/posts/ai-risk-beyond-ai.html</guid>
