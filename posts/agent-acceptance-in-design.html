@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>金融 Agent 的验收标准要写进设计文档 · 研究工程笔记</title>
+<meta name="description" content="从蚂蚁开源金融搜索评测基准 FinFIRST 与人机责任三分法切入，落到我们自己把验收拆成几何/数据/渲染三层、把每类事故变成一条检查项、数字一律现算、以及把要人拍板的动作做成脚本第一行必须问的闸门。">
+<link rel="canonical" href="https://timyefi.github.io/posts/agent-acceptance-in-design.html"><link rel="icon" href="../assets/icon.svg" type="image/svg+xml"><link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="研究工程笔记" href="https://timyefi.github.io/feed.xml"><meta name="theme-color" content="#0b2545"><meta property="og:type" content="article"><meta property="og:site_name" content="研究工程笔记"><meta property="og:title" content="金融 Agent 的验收标准要写进设计文档 · 研究工程笔记"><meta property="og:description" content="从蚂蚁开源金融搜索评测基准 FinFIRST 与人机责任三分法切入，落到我们自己把验收拆成几何/数据/渲染三层、把每类事故变成一条检查项、数字一律现算、以及把要人拍板的动作做成脚本第一行必须问的闸门。"><meta property="og:url" content="https://timyefi.github.io/posts/agent-acceptance-in-design.html"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://timyefi.github.io/assets/hero-wide.png"><meta property="og:image:width" content="1200"><meta name="twitter:image" content="https://timyefi.github.io/assets/hero-wide.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "金融 Agent 的验收标准要写进设计文档 · 研究工程笔记", "description": "从蚂蚁开源金融搜索评测基准 FinFIRST 与人机责任三分法切入，落到我们自己把验收拆成几何/数据/渲染三层、把每类事故变成一条检查项、数字一律现算、以及把要人拍板的动作做成脚本第一行必须问的闸门。", "url": "https://timyefi.github.io/posts/agent-acceptance-in-design.html", "inLanguage": "zh-CN", "publisher": {"@type": "Organization", "name": "研究工程笔记"}, "datePublished": "2026-09-24"}</script>
+<style>
+:root{--navy:#0b2545;--navy2:#13315c;--deep:#07182e;--gold:#c8a45c;
+ --gold2:#e0c084;--ink:#16202c;--muted:#6b7785;--line:#e3e7ec;
+ --bg:#f6f8fa;--card:#ffffff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Source Han Sans SC','Noto Sans CJK SC',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--navy2);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+.hero{position:relative;overflow:hidden;color:#fff;isolation:isolate;padding:64px 0 68px;
+ background:linear-gradient(140deg,var(--deep) 0%,var(--navy) 46%,var(--navy2) 100%);
+ border-bottom:1px solid rgba(200,164,92,.32)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.30;
+ background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:46px 46px}
+.hero::after{content:"";position:absolute;z-index:-1;width:760px;height:760px;left:62%;top:-420px;
+ transform:translateX(-50%);border-radius:50%;
+ background:radial-gradient(circle,rgba(200,164,92,.30) 0%,rgba(200,164,92,.08) 42%,transparent 68%)}
+.kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:2.8px;
+ color:var(--gold2);font-weight:600;margin-bottom:18px}
+.kick i{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:block;flex:none}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,4vw,42px);line-height:1.26;font-weight:800;
+ letter-spacing:-.3px}
+.hero h1 .grad{background:linear-gradient(100deg,var(--gold2),#fff7e6 55%,var(--gold2));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 0 8px;color:#c3d2e4;font-size:15.5px;line-height:1.78;max-width:680px}
+.hero nav{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.hero nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;
+ font-size:14px;font-weight:600;transition:.24s}
+.hero nav a.pri{background:linear-gradient(135deg,var(--gold),#b8923f);color:#2a2109;
+ box-shadow:0 8px 22px rgba(200,164,92,.30)}
+.hero nav a.pri:hover{transform:translateY(-2px);text-decoration:none}
+.hero nav a.ghost{background:rgba(255,255,255,.07);color:#dfe8f3;
+ border:1px solid rgba(255,255,255,.22)}
+.hero nav a.ghost:hover{background:rgba(255,255,255,.13);text-decoration:none}
+.hero .stats{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 40px}
+.hero .stats .st{display:flex;align-items:baseline;gap:9px}
+.hero .stats .st b{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero .stats .st span{font-size:13.5px;color:#9fb3c8}
+@media(max-width:640px){.hero .stats{gap:6px 24px;margin-top:24px}
+ .hero .stats .st b{font-size:22px} .hero .stats .st span{font-size:12.5px}}
+
+.sec{margin:52px 0 20px;display:flex;align-items:center;gap:14px}
+.sec i{width:6px;height:30px;border-radius:3px;background:var(--gold);display:block;flex:none}
+.sec h2{margin:0;font-size:22px;letter-spacing:.4px;color:var(--navy)}
+.sec span{color:var(--muted);font-size:12.5px;letter-spacing:2.2px;font-weight:600}
+.sec hr{flex:1;border:0;border-top:1px solid var(--line);margin:0}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(322px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;justify-content:space-between;
+ background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 20px;
+ overflow:hidden;transition:.24s}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;
+ background:linear-gradient(90deg,var(--navy),var(--navy2) 55%,var(--gold))}
+.card::after{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;
+ border-radius:0 3px 3px 0;background:var(--gold);opacity:0;transition:.24s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(11,37,69,.11);
+ border-color:#cfd6de;text-decoration:none}
+.card:hover::after{opacity:1}
+.card h3{margin:0 0 8px;font-size:18px;line-height:1.45;color:var(--navy);letter-spacing:.2px}
+.card p{margin:0 0 14px;color:var(--muted);font-size:14px}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.tag{display:inline-block;font-size:11.5px;letter-spacing:1.6px;font-weight:700;color:var(--gold);
+ border:1px solid rgba(200,164,92,.42);background:rgba(200,164,92,.09);border-radius:999px;
+ padding:2px 11px;white-space:nowrap}
+.when{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.arrow{color:var(--gold);font-weight:700}
+
+.article{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+.article h1{font-size:clamp(24px,3vw,32px);line-height:1.32;margin:0 0 10px;color:var(--navy)}
+.article .meta{color:var(--muted);font-size:13px;margin:0 0 32px;padding-bottom:16px;
+ border-bottom:1px solid var(--line)}
+.article p{margin:0 0 18px;font-size:16.5px;line-height:1.9}
+.article h2{font-size:21px;margin:40px 0 14px;color:var(--navy);padding-bottom:8px;
+ border-bottom:1px solid var(--line)}
+.article h3{font-size:17.5px;margin:32px 0 10px;color:var(--navy)}
+.article hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+.article blockquote{margin:0 0 18px;padding:2px 18px;border-left:3px solid var(--gold);
+ color:var(--muted)}
+.article code{background:#f0f2f5;padding:1px 6px;border-radius:4px;font-size:14px;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace}
+.article pre{background:#0e1c2e;color:#e6edf5;padding:16px 18px;border-radius:10px;overflow:auto}
+.article pre code{background:none;padding:0;color:inherit}
+.article ul,.article ol{padding-left:24px;margin:0 0 18px} .article li{margin:0 0 8px}
+.article .tw{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.article table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+.article th,.article td{border:1px solid var(--line);padding:9px 12px;text-align:left;
+ vertical-align:top}
+.article th{background:#eef2f7;color:var(--navy);font-weight:700;white-space:nowrap}
+.article tbody tr:nth-child(even){background:#fafbfd}
+.article h2,.article h3{scroll-margin-top:18px}
+.article .toc{background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:16px 20px;margin:0 0 30px}
+.article .toc p{margin:0 0 8px;font-size:12.5px;letter-spacing:2px;font-weight:700;
+ color:var(--muted)}
+.article .toc ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+.article .toc a{color:var(--navy2)}
+.article .toc li{margin:0}
+.article .meta .dot{color:#c8d0d9;padding:0 7px}
+.article .tags{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+ display:flex;flex-wrap:wrap;gap:8px}
+.pager{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:26px 0 0}
+.pager a{display:block;border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+ background:#fff;transition:.24s}
+.pager a:hover{border-color:#cfd6de;text-decoration:none;transform:translateY(-1px)}
+.pager .lab{font-size:11.5px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.pager .tt{margin-top:6px;color:var(--navy);font-weight:600;font-size:15px;line-height:1.5}
+.pager .ph{visibility:hidden}
+.article img{max-width:100%;height:auto;border-radius:10px}
+
+footer.site{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;
+ color:var(--muted);font-size:13px}
+footer.site p{margin:0 0 6px}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(286px,1fr))}}
+@media(max-width:640px){
+ .wrap{padding:0 18px} .hero{padding:46px 0 50px} .grid{grid-template-columns:1fr}
+ .card{padding:20px} .article{padding:34px 18px 64px}
+ .pager{grid-template-columns:1fr} .article p{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><div class="kick"><i></i>RESEARCH ENGINEERING · AI WORKFLOW</div><h1>金融 Agent 的验收标准要写进设计文档</h1><p>从蚂蚁开源金融搜索评测基准 FinFIRST 与人机责任三分法切入，落到我们自己把验收拆成几何/数据/渲染三层、把每类事故变成一条检查项、数字一律现算、以及把要人拍板的动作做成脚本第一行必须问的闸门。</p><nav><a class="ghost" href="../index.html">← 全部文章</a><a class="ghost" href="https://github.com/timyefi">GitHub 主页</a></nav></div></header><main class="article"><h1>金融 Agent 的验收标准要写进设计文档</h1><p class="meta">2026-09-24<span class="dot">·</span>理念与方法论<span class="dot">·</span>约 4 分钟</p><nav class="toc"><p>目录 · CONTENTS</p><ol><li><a href="#一-演示之后-第一个问题是-谁来证明">一、演示之后，第一个问题是「谁来证明」</a></li><li><a href="#二-后台才是重点">二、后台才是重点</a></li><li><a href="#三-我们原来的验收是打开页面看一遍">三、我们原来的验收是打开页面看一遍</a></li><li><a href="#四-一次事故之后-检查项多了一条">四、一次事故之后，检查项多了一条</a></li><li><a href="#五-能现算的数字不要写死">五、能现算的数字不要写死</a></li><li><a href="#六-责任那一行要能让机器问到">六、责任那一行要能让机器问到</a></li><li><a href="#七-落点在文档里">七、落点在文档里</a></li></ol></nav><h2 id="一-演示之后-第一个问题是-谁来证明">一、演示之后，第一个问题是「谁来证明」</h2>
+<p>九月上旬蚂蚁发布了一个金融增强模型，同时开源的还有一份评测基准，名字叫 FinFIRST。它测的不是问答的准确率，而是金融搜索里的信源选择、口径判断与推导过程。中文题占六成，超过五分之四的题目包含多个相关子问题，七成半不直接指定信源，要 Agent 自己去找、自己判断该信哪个。</p>
+<p>这几行数字说明的事，比模型本身更值得记：他们把金融研究里的专业判断，翻译成了可以验证、可以复用的题目。一个行当能不能被工程化，先看它的判断标准能不能写成题。</p>
+<h2 id="二-后台才是重点">二、后台才是重点</h2>
+<p>同一批报道里还有两句话讲得更直白。一句是前台界面只是入口，真正的变化发生在客户看不见的风控、审批、技能栈与实时数据库上。另一句是人机责任划分要写进设计文档：Agent 负责执行、探索、分析、试算，人负责定目标、定标准、判结果、担责任。</p>
+<p>前一句与投研的处境严丝合缝。一个 Agent 能不能把一份信用分析做完，不取决于它会不会聊天，取决于后台有没有把财务、估值、舆情这些底库结构化到可以逐列取用的程度。后一句才是新的，它把责任由谁承担从会上的共识，变成文档里的一行。</p>
+<h2 id="三-我们原来的验收是打开页面看一遍">三、我们原来的验收是打开页面看一遍</h2>
+<p>把一个模型接进流程之后，第一件让人停下来的事，不是它能不能做，而是怎么证明它做对了。最早的办法是人工打开页面看。看的人很认真，但每换一版就要重看一遍，代价随版本数往上走，而且总留下几样看一眼就会漏的东西。</p>
+<p>后来把验收拆成三层。几何层算文字框有没有重叠、有没有越出画布；数据层核对页面上的数字与产物是否同源同序；渲染层把图真的画出来看。三层里最不直观的是第三层，也正是前两层替代不了的：几何层证明的是我算的文字框不重叠，证明不了渲染器画出来会是什么样。</p>
+<p>渲染层的做法不复杂。同一张图渲染两次，一次原样，一次删掉所有文字节点，两张图相减，剩下的像素就是文字墨迹。没有阈值猜测，也不受字体、字重与配色的影响。同一列的墨迹如果连成一团，就是粘连；某一行的墨迹落不进任何一条带，就是它根本没画出来。</p>
+<h2 id="四-一次事故之后-检查项多了一条">四、一次事故之后，检查项多了一条</h2>
+<p>头图上出过一次事故，副标题压在了标题上。事后再看，当时十七项检查全部通过，因为检查项里没有这一件事。真正的原因是版式里的纵向坐标是手工填的数字，改了上面一行的字号，下面几行的位置不会跟着动。</p>
+<p>修法不是把数字一个个调对，是把坐标改成推导出来的：每一块的位置由上一块的视觉底边加一个间距得到，间距成了唯一的旋钮。手填坐标这件事本身被取消，同类事故就不再可能发生。</p>
+<p>这条经验后来被写成规则：每修一类事故，第一件事就是把它变成一条检查项。检查项不会自己长出来，它是被事故换来的。</p>
+<h2 id="五-能现算的数字不要写死">五、能现算的数字不要写死</h2>
+<p>同一个头图上有四个统计数字。其中一个曾经在代码里写死，写着二十一个公开仓库，而当时实际只有十六个。这类错误不报错，只是安静地挂在首页上，谁看都以为是对的。现在这四个数字全部由构建脚本从产物现算，展示顺序写在配置里，顺序本身也被检查：哪一项排第一、哪一项要排在另一项前面，都有一条断言守着。</p>
+<p>写死的数字与手填的坐标是同一种错误，都是把一个本该推导的量当成了常量。区别只在于一个错在页面上，一个错在图里。</p>
+<h2 id="六-责任那一行要能让机器问到">六、责任那一行要能让机器问到</h2>
+<p>第三条最难，也最该抄。我们的做法是把要人拍板的事情从对话里搬到一张网页上：Agent 想发布任何东西，先去登记一张卡，写清影响面与不可逆的程度，然后等。执行脚本的第一行查这张卡，拿不到放行就中止。</p>
+<p>这里有一个必须显式写进设计的细节：闸门连不上时按未批准处理。最省事的写法是连不上就当作通过，那等于把闸门取消掉，还留了一行看起来在检查的代码。</p>
+<p>还有一条同样要写进设计文档：对话窗口里的继续、可以、批准，全都不算批准。我常用的这套流程里，对话中断之后环境会自动补一句继续进来。如果把这句读成批准，前面所有的登记与校验都会绕过去。判断放行的唯一依据，是那张网页上留下的记录。</p>
+<h2 id="七-落点在文档里">七、落点在文档里</h2>
+<p>回到开头那个问题。金融 Agent 从演示走到生产，卡住的从来不是能力，是怎么证明它行这件事没有被写下来。</p>
+<p>写下来的样子是三条：验收标准与功能需求放在同一层，不推到测试环节去；能由产物现算的数字一律现算，展示顺序也由配置约束；凡是要人担责的动作，在脚本第一行有一个地方去问，答不上来等于不通过。</p>
+<p>人做的事没有减少，只是往前挪了。目标是人的，标准是人的，结果是人判的，责任也是人的。Agent 拿走的是执行、探索、试算这些，以及过去被浪费在重复核对上的那部分时间。</p>
+<hr>
+<p><em>本文为个人研究笔记，不构成任何投资建议。</em></p><div class="tags"><span class="tag">AI</span><span class="tag">验收</span><span class="tag">治理</span><span class="tag">研究方法</span></div><nav class="pager"><span class="ph"></span><a href="project-not-proxy.html"><span class="lab">下一篇 →</span><span class="tt">低一档的评级，标的就是项目本身</span></a></nav></main>
+<footer class="site"><div class="wrap">
+  <p>文章采用 CC BY-NC 4.0 许可 · 转载请注明来源链接（不署个人名）· 商业用途需另行授权</p>
+  <p>研究工程 · AI 工作流 · 本机优先</p>
+</div></footer>
+</body>
+</html>

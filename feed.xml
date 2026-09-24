@@ -5,6 +5,14 @@
   <description>关于 AI、Skill 工程化与研究工作方法论的写作</description>
   <language>zh-CN</language>
   <item>
+    <title>金融 Agent 的验收标准要写进设计文档</title>
+    <link>https://timyefi.github.io/posts/agent-acceptance-in-design.html</link>
+    <guid isPermaLink="true">https://timyefi.github.io/posts/agent-acceptance-in-design.html</guid>
+    <pubDate>Thu, 24 Sep 2026 08:00:00 +0800</pubDate>
+    <category>理念与方法论</category>
+    <description>从蚂蚁开源金融搜索评测基准 FinFIRST 与人机责任三分法切入，落到我们自己把验收拆成几何/数据/渲染三层、把每类事故变成一条检查项、数字一律现算、以及把要人拍板的动作做成脚本第一行必须问的闸门。</description>
+  </item>
+  <item>
     <title>低一档的评级，标的就是项目本身</title>
     <link>https://timyefi.github.io/posts/project-not-proxy.html</link>
     <guid isPermaLink="true">https://timyefi.github.io/posts/project-not-proxy.html</guid>
